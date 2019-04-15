@@ -215,13 +215,17 @@ void Aimbot::Aim(CUserCmd* cmd)
 						if (g_LocalPlayer->m_hActiveWeapon()->CanFire()) {
 
 							if (g_Options.Aimbot_AutoScope && !g_LocalPlayer->m_bIsScoped() && g_LocalPlayer->m_hActiveWeapon()->IsSniper())
-								cmd->buttons = IN_ATTACK2;
+								cmd->buttons |= IN_ATTACK2;
 
 							if (g_Options.Aimbot_AutoStop) {
 								cmd->forwardmove = 0;
 								cmd->sidemove = 0;
+								cmd->upmove = 0;
+								cmd->buttons = 0;
 							}
 
+							if (g_Options.Aimbot_AutoCrouch)
+								cmd->buttons |= IN_DUCK;
 
 							if (!g_Options.Aimbot_Silent) {
 								g_EngineClient->SetViewAngles(&EnemyAng);

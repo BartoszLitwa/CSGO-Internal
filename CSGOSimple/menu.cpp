@@ -353,6 +353,7 @@ void RenderAimTab()
     float group_w = ImGui::GetCurrentWindow()->Size.x - style.WindowPadding.x * 2;
 	static const char* ItemsBone[]{ "Head", "Neck", "Pelvis", "Stomach", "Lower Chest", "Chest", "Upper Chest", "Right Thigh", "Left Thigh", "Right Calf", "Left Calf", "Right Foot", "Left Foot", "Right Hand",
 									"Left Hand", "Right Upper Arm", "Left Upper Arm", "Right ForeArm", "Left ForeArm"   };
+	static const char* AAType[]{ "Legit", "Custom" };
 
     bool placeholder_true = true;
 
@@ -377,6 +378,8 @@ void RenderAimTab()
 		ImGui::Checkbox("Visibility Check", &g_Options.Aimbot_VisibilityCheck);
 		ImGui::NextColumn();
 		ImGui::Checkbox("Anti Aim", &g_Options.AntiAim_AntiAim);
+		ImGui::Combo("AA Type:", &g_Options.AntiAim_AntiAimType, AAType, IM_ARRAYSIZE(AAType));
+		ImGui::SliderInt("AA Value", &g_Options.AntiAim_AntiAimValue, -180, 180);
 		ImGui::NextColumn();
 		ImGui::Checkbox("BackTrack", &g_Options.Aimbot_BackTrack);
 		ImGui::Checkbox("Aim At BackTrack", &g_Options.Aimbot_AimAtBackTrack);
@@ -385,6 +388,7 @@ void RenderAimTab()
 		ImGui::SliderFloat("Min DMG:", &g_Options.Aimbot_AutoWallMinDmg, 0.0f, 100.0f);
 		ImGui::Checkbox("AutoStop", &g_Options.Aimbot_AutoStop);
 		ImGui::Checkbox("AutoScope", &g_Options.Aimbot_AutoScope);
+		ImGui::Checkbox("AutoCrouch", &g_Options.Aimbot_AutoCrouch);
         auto pos = ImGui::GetCurrentWindow()->Pos;
         auto wsize = ImGui::GetCurrentWindow()->Size;
 

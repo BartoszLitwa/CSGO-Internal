@@ -84,7 +84,7 @@ public:
 	OPTION(bool, Aimbot_Aimbot, true);
 	OPTION(bool, Aimbot_Silent, true);
 	OPTION(bool, Aimbot_VisibilityCheck, false);
-	OPTION(int, Aimbot_Bone, 8);
+	OPTION(int, Aimbot_Bone, 0);
 	OPTION(float, Aimbot_AimbotFov, 90.f);
 	OPTION(bool, Aimbot_Smooth, false);
 	OPTION(float, Aimbot_SmoothValue, 10.f);
@@ -96,12 +96,14 @@ public:
 	OPTION(float, Aimbot_AutoWallMinDmg, 50.0f);
 	OPTION(bool, Aimbot_AutoStop, true);
 	OPTION(bool, Aimbot_AutoScope, true);
+	OPTION(bool, Aimbot_AutoCrouch, true);
 
 	//
 	// AntiAim
 	//
-	OPTION(bool, AntiAim_AntiAim, false);
-	OPTION(bool, AntiAim_AntiAim2, false);
+	OPTION(bool, AntiAim_AntiAim, true);
+	OPTION(int, AntiAim_AntiAimType, 0);
+	OPTION(int, AntiAim_AntiAimValue, 90);
 
 	//
 	// SkinChanger
