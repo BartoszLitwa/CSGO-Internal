@@ -13,6 +13,7 @@
 #include "features/Aimbot.hpp"
 #include "Skins.h"
 #include "BackTrack.h"
+#include "features/AntiAim.h"
 
 #pragma intrinsic(_ReturnAddress)  
 
@@ -173,6 +174,9 @@ namespace Hooks
 
 		if (g_Options.Aimbot_Aimbot)
 				Aimbot::Aim(cmd);
+
+		if (g_LocalPlayer->m_lifeState() == LIFE_ALIVE && g_Options.AntiAim_AntiAim)
+			AntiAim::LegitAA(cmd, bSendPacket);
 
 		verified->m_cmd = *cmd;
 		verified->m_crc = cmd->GetChecksum();

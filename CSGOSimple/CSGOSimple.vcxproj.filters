@@ -146,6 +146,9 @@
     <ClCompile Include="BackTrack.cpp">
       <Filter>Source Files\features</Filter>
     </ClCompile>
+    <ClCompile Include="features\AntiAim.cpp">
+      <Filter>Source Files\features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="valve_sdk\misc\BaseHandle.hpp">
@@ -425,6 +428,9 @@
       <Filter>Header Files\SDK</Filter>
     </ClInclude>
     <ClInclude Include="BackTrack.h">
+      <Filter>Header Files\features</Filter>
+    </ClInclude>
+    <ClInclude Include="features\AntiAim.h">
       <Filter>Header Files\features</Filter>
     </ClInclude>
   </ItemGroup>

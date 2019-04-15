@@ -98,6 +98,7 @@
     <ClCompile Include="Autowall.cpp" />
     <ClCompile Include="BackTrack.cpp" />
     <ClCompile Include="features\Aimbot.cpp" />
+    <ClCompile Include="features\AntiAim.cpp" />
     <ClCompile Include="features\bhop.cpp" />
     <ClCompile Include="features\chams.cpp" />
     <ClCompile Include="features\glow.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Autowall.h" />
     <ClInclude Include="BackTrack.h" />
     <ClInclude Include="features\Aimbot.hpp" />
+    <ClInclude Include="features\AntiAim.h" />
     <ClInclude Include="fonts\cousine.hpp" />
     <ClInclude Include="fonts\fonts.hpp" />
     <ClInclude Include="imgui\impl\imgui_impl_dx9.h" />

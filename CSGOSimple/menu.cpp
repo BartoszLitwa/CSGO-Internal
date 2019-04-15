@@ -351,6 +351,8 @@ void RenderAimTab()
 {
     auto& style = ImGui::GetStyle();
     float group_w = ImGui::GetCurrentWindow()->Size.x - style.WindowPadding.x * 2;
+	static const char* ItemsBone[]{ "Head", "Neck", "Pelvis", "Stomach", "Lower Chest", "Chest", "Upper Chest", "Right Thigh", "Left Thigh", "Right Calf", "Left Calf", "Right Foot", "Left Foot", "Right Hand",
+									"Left Hand", "Right Upper Arm", "Left Upper Arm", "Right ForeArm", "Left ForeArm"   };
 
     bool placeholder_true = true;
 
@@ -366,13 +368,15 @@ void RenderAimTab()
 		ImGui::SetColumnOffset(2, 2 * group_w / 3.0f);
 		ImGui::SetColumnOffset(3, group_w);
 		ImGui::Checkbox("Aimbot", &g_Options.Aimbot_Aimbot);
+		ImGui::Combo("Bone:", &g_Options.Aimbot_Bone, ItemsBone, IM_ARRAYSIZE(ItemsBone));
 		ImGui::SliderFloat("Aimbot Fov", &g_Options.Aimbot_AimbotFov, 0.0f, 180.0f);
 		ImGui::Checkbox("Smooth", &g_Options.Aimbot_Smooth);
 		ImGui::SliderFloat("Smooth Fov", &g_Options.Aimbot_SmoothValue, 0.0f, 100.0f);
 		ImGui::Checkbox("Silent", &g_Options.Aimbot_Silent);
-		ImGui::NextColumn();
 		ImGui::Checkbox("Recoil Prediction", &g_Options.Aimbot_RecoilPrediction);
 		ImGui::Checkbox("Visibility Check", &g_Options.Aimbot_VisibilityCheck);
+		ImGui::NextColumn();
+		ImGui::Checkbox("Anti Aim", &g_Options.AntiAim_AntiAim);
 		ImGui::NextColumn();
 		ImGui::Checkbox("BackTrack", &g_Options.Aimbot_BackTrack);
 		ImGui::Checkbox("Aim At BackTrack", &g_Options.Aimbot_AimAtBackTrack);
@@ -494,7 +498,7 @@ void Menu::CreateStyle()
 	_style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.0f, 1.0f, 0.0f, 1.000f);
 	_style.Colors[ImGuiCol_FrameBg] = ImVec4(0.0f, 0.0f, 1.f, 1.0f);
 	_style.Colors[ImGuiCol_WindowBg] = ImVec4(0.000f, 0.00f, 0.0f, 1.0f);
-	_style.Colors[ImGuiCol_PopupBg] = ImVec4(0.0f, 1.0f, 0.f, 1.0f);
+	_style.Colors[ImGuiCol_PopupBg] = ImVec4(0.0f, 1.0f, 0.f, 0.50f);
 	ImGui::GetStyle() = _style;
 }
 

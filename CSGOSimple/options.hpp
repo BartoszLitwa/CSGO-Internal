@@ -63,7 +63,7 @@ public:
 	OPTION(bool, misc_no_scope, true);
 	OPTION(bool, misc_FakeLag, true);
 	OPTION(int, misc_FakeLag_FakeLagAmount, 1);
-	OPTION(bool, misc_thirdperson, false);
+	OPTION(bool, misc_thirdperson, true);
 	OPTION(bool, misc_showranks, true);
 	OPTION(bool, misc_watermark, true);
 	OPTION(float, misc_thirdperson_dist, 150.f);
@@ -76,7 +76,7 @@ public:
 	OPTION(bool, misc_ClanTag, true);
 	OPTION(char*, misc_clantagString, "CRNYY's Cheat");
 	OPTION(bool, misc_nameChanger, false);
-	OPTION(char*, misc_NameString, "");
+	OPTION(char*, misc_NameString, "Elo");
 
 	//
 	// Aimbot
@@ -97,6 +97,11 @@ public:
 	OPTION(bool, Aimbot_AutoStop, true);
 	OPTION(bool, Aimbot_AutoScope, true);
 
+	//
+	// AntiAim
+	//
+	OPTION(bool, AntiAim_AntiAim, false);
+	OPTION(bool, AntiAim_AntiAim2, false);
 
 	//
 	// SkinChanger
