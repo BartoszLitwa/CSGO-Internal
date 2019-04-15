@@ -6,6 +6,7 @@
 #include "../valve_sdk/interfaces/CClientState.hpp"
 #include "../valve_sdk/interfaces/IVEngineClient.hpp"
 #include "../Autowall.h"
+#include "../BackTrack.h"
 
 C_BasePlayer * Aimbot::GetClosestEnemy()
 {
@@ -43,7 +44,7 @@ void Smooth(QAngle& viewangle, QAngle & angle, float smoothValue)
 
 void Aimbot::Aim(CUserCmd* cmd)
 {
-	if (g_LocalPlayer->IsPlayer() && g_LocalPlayer->m_hActiveWeapon()->IsGun()) {
+	if (g_LocalPlayer->IsAlive() && g_LocalPlayer->m_hActiveWeapon()->IsGun()) {
 		if (cmd->buttons & IN_ATTACK && !g_Options.Aimbot_AutoWall)
 		{
 			QAngle ViewAngles;
@@ -63,7 +64,7 @@ void Aimbot::Aim(CUserCmd* cmd)
 				if (g_Options.Aimbot_Smooth)
 					Smooth(ViewAngles, EnemyAng, g_Options.Aimbot_SmoothValue);
 
-				EnemyAng.Normalize();
+				EnemyAng.Clamp().Normalize();
 
 				if (!g_Options.Aimbot_Silent)
 					g_EngineClient->SetViewAngles(&EnemyAng);
@@ -81,19 +82,45 @@ void Aimbot::Aim(CUserCmd* cmd)
 				C_BasePlayer* pEntity = (C_BasePlayer*)g_EntityList->GetClientEntity(i);
 				if (pEntity && !pEntity->IsDormant() && pEntity->IsAlive() && pEntity->m_iTeamNum() != g_LocalPlayer->m_iTeamNum() && !pEntity->m_bGunGameImmunity())
 				{
-					if (Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_HEAD)) * 2 >= g_Options.Aimbot_AutoWallMinDmg)
+					if (Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_HEAD)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_NECK)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_PELVIS)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_STOMACH)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_LOWER_CHEST)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_CHEST)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_UPPER_CHEST)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_RIGHT_THIGH)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_LEFT_THIGH)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_RIGHT_CALF)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_LEFT_CALF)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_RIGHT_FOOT)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_LEFT_FOOT)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_RIGHT_HAND)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_LEFT_HAND)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_RIGHT_UPPER_ARM)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_RIGHT_FOREARM)) * 2 >= g_Options.Aimbot_AutoWallMinDmg || Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_LEFT_UPPER_ARM)) * 2 >= g_Options.Aimbot_AutoWallMinDmg
+						|| Autowall::GetDamage(pEntity->GetHitboxPos(HITBOX_LEFT_FOREARM)) * 2 >= g_Options.Aimbot_AutoWallMinDmg)
 					{
-						QAngle EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetBonePos(g_Options.Aimbot_Bone));
+						QAngle EnemyAng;
+						if (!g_Options.Aimbot_AimAtBackTrack)
+							EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetBonePos(g_Options.Aimbot_Bone));
+						else
+							EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetBonePos(8));
+
 						EnemyAng -= g_LocalPlayer->m_aimPunchAngle() * 2;
-						EnemyAng.Normalize();
-						/*if (g_LocalPlayer->m_hActiveWeapon()->CanFire()) {*/
-							if (!g_Options.Aimbot_Silent)
-								g_EngineClient->SetViewAngles(&EnemyAng);
-							else {
-								cmd->buttons = IN_ATTACK;
-								cmd->viewangles = EnemyAng;
-								cmd->buttons != IN_ATTACK;
+						EnemyAng.Clamp().Normalize();
+						if (g_LocalPlayer->m_hActiveWeapon()->CanFire()) {
+
+							if (g_Options.Aimbot_AutoScope && !g_LocalPlayer->m_bIsScoped() && g_LocalPlayer->m_hActiveWeapon()->IsSniper())
+								cmd->buttons = IN_ATTACK2;
+
+							if (g_Options.Aimbot_AutoStop) {
+								cmd->forwardmove = 0;
+								cmd->sidemove = 0;
 							}
+
+
+							if (!g_Options.Aimbot_Silent) {
+								g_EngineClient->SetViewAngles(&EnemyAng);
+								cmd->buttons |= IN_ATTACK;
+							}
+							else {
+								cmd->viewangles = EnemyAng;
+								cmd->buttons |= IN_ATTACK;
+							}
+						}
 					}
 				}
 			}

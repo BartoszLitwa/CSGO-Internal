@@ -83,16 +83,19 @@ public:
 	//
 	OPTION(bool, Aimbot_Aimbot, true);
 	OPTION(bool, Aimbot_Silent, true);
-	OPTION(bool, Aimbot_VisibilityCheck, true);
+	OPTION(bool, Aimbot_VisibilityCheck, false);
 	OPTION(int, Aimbot_Bone, 8);
 	OPTION(float, Aimbot_AimbotFov, 90.f);
 	OPTION(bool, Aimbot_Smooth, false);
 	OPTION(float, Aimbot_SmoothValue, 10.f);
 	OPTION(bool, Aimbot_RecoilPrediction, true);
 	OPTION(bool, Aimbot_BackTrack, true);
+	OPTION(bool, Aimbot_AimAtBackTrack, true);
 	OPTION(int, Aimbot_BackTrackTicks, 12);
 	OPTION(bool, Aimbot_AutoWall, false);
 	OPTION(float, Aimbot_AutoWallMinDmg, 50.0f);
+	OPTION(bool, Aimbot_AutoStop, true);
+	OPTION(bool, Aimbot_AutoScope, true);
 
 
 	//

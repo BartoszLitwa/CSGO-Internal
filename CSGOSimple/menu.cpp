@@ -375,9 +375,12 @@ void RenderAimTab()
 		ImGui::Checkbox("Visibility Check", &g_Options.Aimbot_VisibilityCheck);
 		ImGui::NextColumn();
 		ImGui::Checkbox("BackTrack", &g_Options.Aimbot_BackTrack);
+		ImGui::Checkbox("Aim At BackTrack", &g_Options.Aimbot_AimAtBackTrack);
 		ImGui::SliderInt("Ticks", &g_Options.Aimbot_BackTrackTicks, 1, 12);
 		ImGui::Checkbox("AutoWall", &g_Options.Aimbot_AutoWall);
 		ImGui::SliderFloat("Min DMG:", &g_Options.Aimbot_AutoWallMinDmg, 0.0f, 100.0f);
+		ImGui::Checkbox("AutoStop", &g_Options.Aimbot_AutoStop);
+		ImGui::Checkbox("AutoScope", &g_Options.Aimbot_AutoScope);
         auto pos = ImGui::GetCurrentWindow()->Pos;
         auto wsize = ImGui::GetCurrentWindow()->Size;
 
