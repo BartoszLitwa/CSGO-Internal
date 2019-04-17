@@ -66,6 +66,8 @@ public:
 	OPTION(bool, misc_thirdperson, true);
 	OPTION(bool, misc_showranks, true);
 	OPTION(bool, misc_watermark, true);
+	OPTION(bool, misc_BulletTracer, true);
+	OPTION(int, misc_BulletTracer_Value, 1000);
 	OPTION(float, misc_thirdperson_dist, 150.f);
 	OPTION(int, viewmodel_fov, 68);
 	OPTION(int, fov, 110);
@@ -81,6 +83,7 @@ public:
 	//
 	// Aimbot
 	//
+	OPTION(bool, AimbotCanShootWhileAAON, false);
 	OPTION(bool, Aimbot_Aimbot, true);
 	OPTION(bool, Aimbot_Silent, true);
 	OPTION(bool, Aimbot_VisibilityCheck, false);
@@ -102,8 +105,11 @@ public:
 	// AntiAim
 	//
 	OPTION(bool, AntiAim_AntiAim, true);
-	OPTION(int, AntiAim_AntiAimType, 0);
-	OPTION(int, AntiAim_AntiAimValue, 90);
+	OPTION(int, AntiAim_AntiAimTypeYaw, 0);
+	OPTION(int, AntiAim_AntiAimTypePitch, 0);
+	OPTION(int, AntiAim_SpinBotSpeed, 1);
+	OPTION(float, AntiAim_AntiAimyaw, 90.0f);
+	OPTION(float, AntiAim_AntiAimpitch, 89.0f);
 
 	//
 	// SkinChanger
@@ -138,8 +144,9 @@ public:
     OPTION(Color, color_chams_player_enemy_visible, Color(255, 0, 0));
     OPTION(Color, color_chams_player_enemy_occluded, Color(255, 128, 0));
     OPTION(Color, color_chams_arms_visible, Color(0, 128, 255));
-    OPTION(Color, color_chams_arms_occluded, Color(0, 128, 255));
+    OPTION(Color, color_chams_arms_occluded, Color(0, 128, 255)); 
 	OPTION(Color, color_watermark, Color(0, 128, 255)); // no menu config cuz its useless
+	OPTION(Color, color_BulletTracer, Color(0, 255, 0));
 };
 
 extern Config g_Options;

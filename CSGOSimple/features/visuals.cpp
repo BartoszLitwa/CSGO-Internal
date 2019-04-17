@@ -182,10 +182,32 @@ void Visuals::Player::RenderSnapline()
 		ctx.feet_pos.x, ctx.feet_pos.y, ctx.clr);
 }
 //--------------------------------------------------------------------------------
+void Visuals::Player::BulletTracer()
+{
+	Vector src3D, dst3D, forward, src, dst;
+	trace_t trace;
+	Ray_t ray;
+	CTraceFilter TraceFilter;
+
+	Math::AngleVectors(ctx.pl->m_angEyeAngles(), forward);
+	TraceFilter.pSkip = ctx.pl;
+	src3D = ctx.pl->GetBonePos(6) - Vector(0, 0, 0);
+	dst3D = src3D + (forward * g_Options.misc_BulletTracer_Value);
+
+	ray.Init(src3D, dst3D);
+
+	g_EngineTrace->TraceRay(ray, MASK_SHOT, &TraceFilter, &trace);
+
+	if (!Math::WorldToScreen(src3D, src) || !Math::WorldToScreen(trace.endpos, dst))
+		return;
+
+	Render::Get().RenderLine(src.x, src.y, dst.x, dst.y, g_Options.color_BulletTracer);
+	//Render::Get().(dst.x - 3, dst.y - 3, 6, 6, color);
+}
+//--------------------------------------------------------------------------------
 void Visuals::RenderCrosshair()
 {
 	int w, h;
-
 	g_EngineClient->GetScreenSize(w, h);
 
 	int cx = w / 2;
@@ -382,6 +404,7 @@ void Visuals::ThirdPerson() {
 }
 
 
+
 void Visuals::AddToDrawList() {
 	for (auto i = 1; i <= g_EntityList->GetHighestEntityIndex(); ++i) {
 		auto entity = C_BaseEntity::GetEntityByIndex(i);
@@ -401,6 +424,7 @@ void Visuals::AddToDrawList() {
 				if (g_Options.esp_player_names)     player.RenderName();
 				if (g_Options.esp_player_health)    player.RenderHealth();
 				if (g_Options.esp_player_armour)    player.RenderArmour();
+				if (g_Options.misc_BulletTracer)	player.BulletTracer();
 			}
 		}
 		else if (g_Options.esp_dropped_weapons && entity->IsWeapon())
@@ -416,5 +440,4 @@ void Visuals::AddToDrawList() {
 
 	if (g_Options.esp_crosshair)
 		RenderCrosshair();
-
 }

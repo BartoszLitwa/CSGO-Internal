@@ -38,7 +38,7 @@
 #include "Interfaces/IPhysics.hpp"
 #include "Interfaces/IInputSystem.hpp"
 #include "interfaces/IRefCounted.hpp"
-
+//#include "interfaces/IViewRenderBeams.h"
 #include "Misc/Convar.hpp"
 #include "Misc/CUserCmd.hpp"
 #include "Misc/glow_outline_effect.hpp"
@@ -81,6 +81,8 @@ extern IDirect3DDevice9*     g_D3DDevice9;
 extern CClientState*         g_ClientState;
 extern IPhysicsSurfaceProps* g_PhysSurface;
 extern IInputSystem*         g_InputSystem;
+;//extern IViewRenderBeams*     g_IViewRenderBeams;
+
 
 template<typename... Args>
 void ConMsg(const char* pMsg, Args... args)

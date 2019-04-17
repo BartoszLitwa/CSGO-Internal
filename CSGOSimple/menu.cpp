@@ -257,11 +257,15 @@ void RenderMiscTab()
 		ImGui::Checkbox("Unlimited Duck", &g_Options.misc_UnlimitedDuck);
 		ImGui::Checkbox("Third Person", &g_Options.misc_thirdperson);
 		if(g_Options.misc_thirdperson)
-			ImGui::SliderFloat("Distance", &g_Options.misc_thirdperson_dist, 0.f, 150.f);
+			ImGui::SliderFloat("Distance", &g_Options.misc_thirdperson_dist, 0.f, 300.f);
         ImGui::Checkbox("No hands", &g_Options.misc_no_hands);
 		ImGui::Checkbox("No visual recoil", &g_Options.misc_no_visual_recoil);
 		ImGui::Checkbox("Rank reveal", &g_Options.misc_showranks);
 		ImGui::Checkbox("Watermark##hc", &g_Options.misc_watermark);
+		ImGui::Checkbox("Bullet Tracer", &g_Options.misc_BulletTracer);
+		if (g_Options.misc_BulletTracer) {
+			ImGui::SliderInt("Length", &g_Options.misc_BulletTracer_Value, 1, 10000);
+		}
         //ImGui::PushItemWidth(-1.0f);
 		ImGui::NextColumn();
         ImGui::SliderInt("viewmodel_fov:", &g_Options.viewmodel_fov, 68, 120);
@@ -353,7 +357,8 @@ void RenderAimTab()
     float group_w = ImGui::GetCurrentWindow()->Size.x - style.WindowPadding.x * 2;
 	static const char* ItemsBone[]{ "Head", "Neck", "Pelvis", "Stomach", "Lower Chest", "Chest", "Upper Chest", "Right Thigh", "Left Thigh", "Right Calf", "Left Calf", "Right Foot", "Left Foot", "Right Hand",
 									"Left Hand", "Right Upper Arm", "Left Upper Arm", "Right ForeArm", "Left ForeArm"   };
-	static const char* AAType[]{ "Legit", "Custom" };
+	static const char* AATypeYaw[]{ "Legit", "Spinbot", "Jitter", "SideWays", "Fake SideWays", "Static", "Fake Static", "Custom" };
+	static const char* AATypePitch[]{ "UP", "Normal", "Down", "Random", "Custom" };
 
     bool placeholder_true = true;
 
@@ -378,8 +383,17 @@ void RenderAimTab()
 		ImGui::Checkbox("Visibility Check", &g_Options.Aimbot_VisibilityCheck);
 		ImGui::NextColumn();
 		ImGui::Checkbox("Anti Aim", &g_Options.AntiAim_AntiAim);
-		ImGui::Combo("AA Type:", &g_Options.AntiAim_AntiAimType, AAType, IM_ARRAYSIZE(AAType));
-		ImGui::SliderInt("AA Value", &g_Options.AntiAim_AntiAimValue, -180, 180);
+		ImGui::Combo("AA Yaw:", &g_Options.AntiAim_AntiAimTypeYaw, AATypeYaw, IM_ARRAYSIZE(AATypeYaw));
+		if (g_Options.AntiAim_AntiAimTypeYaw == 1) {
+			ImGui::SliderInt("Spinbot Speed:", &g_Options.AntiAim_SpinBotSpeed, 1, 20);
+		}
+		if (g_Options.AntiAim_AntiAimTypeYaw == 7) {
+			ImGui::SliderFloat("AA yaw", &g_Options.AntiAim_AntiAimyaw, -180.0f, 180.0f);
+		}
+		ImGui::Combo("AA Pitch:", &g_Options.AntiAim_AntiAimTypePitch, AATypePitch, IM_ARRAYSIZE(AATypePitch));
+		if (g_Options.AntiAim_AntiAimTypePitch == 4) {
+			ImGui::SliderFloat("AA pitch", &g_Options.AntiAim_AntiAimpitch, -89.0f, 89.0f);
+		}
 		ImGui::NextColumn();
 		ImGui::Checkbox("BackTrack", &g_Options.Aimbot_BackTrack);
 		ImGui::Checkbox("Aim At BackTrack", &g_Options.Aimbot_AimAtBackTrack);

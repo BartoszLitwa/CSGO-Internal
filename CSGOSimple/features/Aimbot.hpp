@@ -6,5 +6,5 @@ class QAngle;
 namespace Aimbot
 {
 	C_BasePlayer* GetClosestEnemy();
-	void Aim(CUserCmd* cmd);
+	void Aim(CUserCmd* cmd, bool& bSendPacket);
 };

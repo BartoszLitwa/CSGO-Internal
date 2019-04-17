@@ -1,5 +1,4 @@
 #include "sdk.hpp"
-
 #include "../Helpers/Utils.hpp"
 
 IVEngineClient*       g_EngineClient   = nullptr;
@@ -86,6 +85,7 @@ namespace Interfaces
         auto engine = GetModuleHandleW(L"engine.dll");
         auto dx9api = GetModuleHandleW(L"shaderapidx9.dll");
 
+		//g_IViewRenderBeams = **(IViewRenderBeams***)(Utils::PatternScan(client, "B9 ? ? ? ? ? ? ? ? A1 ? ? ? ? ? ? ? ? FF 10 A1 ? ? ? ? ? ? ? ? B9" + 1));
         g_GlobalVars      =  **(CGlobalVarsBase***)(Utils::PatternScan(client, "A1 ? ? ? ? 5E 8B 40 10") + 1);
         g_ClientMode      =        *(IClientMode**)(Utils::PatternScan(client, "A1 ? ? ? ? 8B 80 ? ? ? ? 5D") + 1);
         g_Input           =             *(CInput**)(Utils::PatternScan(client, "B9 ? ? ? ? 8B 40 38 FF D0 84 C0 0F 85") + 1);
@@ -124,5 +124,6 @@ namespace Interfaces
         PRINT_INTERFACE(g_VGuiSurface );
         PRINT_INTERFACE(g_PhysSurface );
         PRINT_INTERFACE(g_InputSystem );
+		//PRINT_INTERFACE(g_IViewRenderBeams);
     }
 }

@@ -42,10 +42,11 @@ void Smooth(QAngle& viewangle, QAngle & angle, float smoothValue)
 	angle = (viewangle + (angle - viewangle).Clamped() / smoothValue).Clamped();
 }
 
-void Aimbot::Aim(CUserCmd* cmd)
+void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 {
 	if (g_LocalPlayer->IsAlive() && g_LocalPlayer->m_hActiveWeapon()->IsGun()) {
-		if (cmd->buttons & IN_ATTACK && !g_Options.Aimbot_AutoWall)
+		g_Options.AimbotCanShootWhileAAON = false;
+		if (cmd->buttons == IN_ATTACK && !g_Options.Aimbot_AutoWall)
 		{
 			QAngle ViewAngles;
 			g_EngineClient->GetViewAngles(&ViewAngles);
@@ -53,7 +54,7 @@ void Aimbot::Aim(CUserCmd* cmd)
 			if (entity)
 			{
 				/*char array[10];
-				sprintf(array, "%f", (Autowall::GetDamage(entity->GetHitboxPos(HITBOX_HEAD)) * 2));
+				sprintf(array, "%f", (Autowall::GetDamage(entity->GetHitboxPos(HITBOX_HEAD)) * 2)); //Print to console autowall dmg
 				Utils::ConsolePrint(array); Utils::ConsolePrint("\n");*/
 				QAngle EnemyAng;
 				switch (g_Options.Aimbot_Bone)
@@ -119,18 +120,31 @@ void Aimbot::Aim(CUserCmd* cmd)
 					break;
 				}
 
+				/*if (g_Options.AntiAim_AntiAim) {
+					if (g_Options.AntiAim_AntiAimType == 1) {
+						float server_time = g_LocalPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
+						cmd->viewangles.yaw = (float)(fmod(server_time / 1.5f * 360.0f / g_Options.AntiAim_SpinBotSpeed, 360.0f));
+					}
+					if (g_Options.AntiAim_AntiAimType == 2) {
+						cmd->viewangles.yaw -= g_Options.AntiAim_AntiAimyaw;
+						cmd->viewangles.pitch -= g_Options.AntiAim_AntiAimpitch;
+					}
+				}*/
+
 				if (g_Options.Aimbot_RecoilPrediction)
 					EnemyAng -= g_LocalPlayer->m_aimPunchAngle() * 2;
 
 				if (g_Options.Aimbot_Smooth)
 					Smooth(ViewAngles, EnemyAng, g_Options.Aimbot_SmoothValue);
-
-				EnemyAng.Clamp().Normalize();
-
-				if (!g_Options.Aimbot_Silent)
+				EnemyAng.Clamp();
+				if (!g_Options.Aimbot_Silent) {
 					g_EngineClient->SetViewAngles(&EnemyAng);
-				else
+					cmd->buttons |= IN_ATTACK;
+				}
+				else {
 					cmd->viewangles = EnemyAng;
+					cmd->buttons != IN_ATTACK;
+				}
 			}
 		}
 
@@ -209,24 +223,33 @@ void Aimbot::Aim(CUserCmd* cmd)
 							EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetBonePos(g_Options.Aimbot_Bone));
 						else
 							EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetBonePos(8));*/
+						/*if (g_Options.AntiAim_AntiAim) {
+							if (g_Options.AntiAim_AntiAimType == 1) {
+								float server_time = g_LocalPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
+								cmd->viewangles.yaw = (float)(fmod(server_time / 1.5f * 360.0f / g_Options.AntiAim_SpinBotSpeed, 360.0f));
+							}
+							if (g_Options.AntiAim_AntiAimType == 2) {
+								cmd->viewangles.yaw -= g_Options.AntiAim_AntiAimyaw;
+								cmd->viewangles.pitch -= g_Options.AntiAim_AntiAimpitch;
+							}
+						}*/
 
 						EnemyAng -= g_LocalPlayer->m_aimPunchAngle() * 2;
-						EnemyAng.Clamp().Normalize();
+						EnemyAng.Clamp();
 						if (g_LocalPlayer->m_hActiveWeapon()->CanFire()) {
 
 							if (g_Options.Aimbot_AutoScope && !g_LocalPlayer->m_bIsScoped() && g_LocalPlayer->m_hActiveWeapon()->IsSniper())
 								cmd->buttons |= IN_ATTACK2;
 
-							if (g_Options.Aimbot_AutoStop) {
+							if (g_Options.Aimbot_AutoStop && g_LocalPlayer->m_iShotsFired() > 1 ) {
 								cmd->forwardmove = 0;
 								cmd->sidemove = 0;
 								cmd->upmove = 0;
 								cmd->buttons = 0;
 							}
 
-							if (g_Options.Aimbot_AutoCrouch)
+							if (g_Options.Aimbot_AutoCrouch && g_LocalPlayer->m_iShotsFired() > 1)
 								cmd->buttons |= IN_DUCK;
-
 							if (!g_Options.Aimbot_Silent) {
 								g_EngineClient->SetViewAngles(&EnemyAng);
 								cmd->buttons |= IN_ATTACK;
@@ -240,6 +263,7 @@ void Aimbot::Aim(CUserCmd* cmd)
 				}
 			}
 		}
+		g_Options.AimbotCanShootWhileAAON = true;
 	}
 }
 

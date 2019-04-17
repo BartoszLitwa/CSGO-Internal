@@ -149,6 +149,9 @@
     <ClCompile Include="features\AntiAim.cpp">
       <Filter>Source Files\features</Filter>
     </ClCompile>
+    <ClCompile Include="Configs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="valve_sdk\misc\BaseHandle.hpp">
@@ -432,6 +435,15 @@
     </ClInclude>
     <ClInclude Include="features\AntiAim.h">
       <Filter>Header Files\features</Filter>
+    </ClInclude>
+    <ClInclude Include="Configs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Beam.h">
+      <Filter>Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IViewRenderBeams.h">
+      <Filter>Header Files\SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,6 +27,7 @@ namespace Hooks
 	vfunc_hook mdlrender_hook;
 	vfunc_hook clientmode_hook;
 	vfunc_hook sv_cheats;
+	QAngle qLastTickAngles;
 
 	void Initialize()
 	{
@@ -161,6 +162,9 @@ namespace Hooks
 		if (Menu::Get().IsVisible())
 			cmd->buttons &= ~IN_ATTACK;
 
+		if (g_LocalPlayer->m_lifeState() == LIFE_ALIVE && g_Options.AntiAim_AntiAim)
+			AntiAim::StartAA(cmd, bSendPacket);
+
 		if (g_Options.misc_bhop)
 			BunnyHop::OnCreateMove(cmd);
 
@@ -173,13 +177,11 @@ namespace Hooks
 		}
 
 		if (g_Options.Aimbot_Aimbot)
-				Aimbot::Aim(cmd);
-
-		if (g_LocalPlayer->m_lifeState() == LIFE_ALIVE && g_Options.AntiAim_AntiAim)
-			AntiAim::LegitAA(cmd, bSendPacket);
+				Aimbot::Aim(cmd, bSendPacket);
 
 		verified->m_cmd = *cmd;
 		verified->m_crc = cmd->GetChecksum();
+		qLastTickAngles = cmd->viewangles;
 	}
 	//--------------------------------------------------------------------------------
 	__declspec(naked) void __stdcall hkCreateMove_Proxy(int sequence_number, float input_sample_frametime, bool active)
@@ -271,6 +273,10 @@ namespace Hooks
 		static auto ofunc = hlclient_hook.get_original<FrameStageNotify>(index::FrameStageNotify);
 		// may be u will use it lol
 		//Skins::OnFrameStageNotify(stage);
+		if (g_Input->m_fCameraInThirdPerson) { //To see AntiAim in ThirdPerson
+			*(QAngle*)g_LocalPlayer->GetVAngles() = qLastTickAngles;
+		}
+		
 		ofunc(g_CHLClient, stage);
 	}
 	//--------------------------------------------------------------------------------
@@ -279,7 +285,7 @@ namespace Hooks
 		static auto ofunc = clientmode_hook.get_original<OverrideView>(index::OverrideView);
 
 		if (g_EngineClient->IsInGame() && vsView)
-			Visuals::Get().ThirdPerson();
+			Visuals::Get().ThirdPerson(); 
 
 		ofunc(g_ClientMode, vsView);
 	}

@@ -39,6 +39,7 @@ public:
 		void RenderHealth();
 		void RenderArmour();
 		void RenderSnapline();
+		void BulletTracer();
 	};
 	void RenderCrosshair();
 	void RenderWeapon(C_BaseCombatWeapon* ent);
