@@ -14,7 +14,7 @@ C_BasePlayer * Aimbot::GetClosestEnemy()
 	g_EngineClient->GetViewAngles(&ViewAngles);
 	C_BasePlayer* BestpEntity = nullptr;
 	float bestDelta = FLT_MAX;
-	for (int i = 0; i <= 32; i++)
+	for (int i = 0; i <= g_EngineClient->GetMaxClients(); i++)
 	{
 		C_BasePlayer* pEntity = (C_BasePlayer*)g_EntityList->GetClientEntity(i);
 		if (pEntity && !pEntity->IsDormant() && pEntity->IsAlive() && pEntity->m_iTeamNum() != g_LocalPlayer->m_iTeamNum() && !pEntity->m_bGunGameImmunity())
@@ -26,7 +26,7 @@ C_BasePlayer * Aimbot::GetClosestEnemy()
 			}
 
 			QAngle EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetHitboxPos(g_Options.Aimbot_Bone));
-			float delta = (EnemyAng - (g_LocalPlayer->m_aimPunchAngle() * 2) - ViewAngles).Clamped().Length();
+			float delta = Math::GetFOV(ViewAngles - g_LocalPlayer->m_aimPunchAngle() * 2, EnemyAng);    //(EnemyAng - (g_LocalPlayer->m_aimPunchAngle() * 2) - ViewAngles).Clamped().Length();
 			if (delta < bestDelta && delta <= g_Options.Aimbot_AimbotFov)
 			{
 				bestDelta = delta;
@@ -46,7 +46,7 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 {
 	if (g_LocalPlayer->IsAlive() && g_LocalPlayer->m_hActiveWeapon()->IsGun()) {
 		g_Options.AimbotCanShootWhileAAON = false;
-		if (cmd->buttons == IN_ATTACK && !g_Options.Aimbot_AutoWall)
+		if (cmd->buttons & IN_ATTACK && !g_Options.Aimbot_AutoWall)
 		{
 			QAngle ViewAngles;
 			g_EngineClient->GetViewAngles(&ViewAngles);
@@ -137,6 +137,20 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 				if (g_Options.Aimbot_Smooth)
 					Smooth(ViewAngles, EnemyAng, g_Options.Aimbot_SmoothValue);
 				EnemyAng.Clamp();
+
+				if (g_Options.Aimbot_AutoScope && !g_LocalPlayer->m_bIsScoped() && g_LocalPlayer->m_hActiveWeapon()->IsSniper())
+					cmd->buttons |= IN_ATTACK2;
+
+				if (g_Options.Aimbot_AutoStop && cmd->buttons & IN_ATTACK) {
+					cmd->forwardmove = 0;
+					cmd->sidemove = 0;
+					cmd->upmove = 0;
+					cmd->buttons = 0;
+				}
+
+				if (g_Options.Aimbot_AutoCrouch && cmd->buttons & IN_ATTACK)
+					cmd->buttons |= IN_DUCK;
+
 				if (!g_Options.Aimbot_Silent) {
 					g_EngineClient->SetViewAngles(&EnemyAng);
 					cmd->buttons |= IN_ATTACK;
@@ -152,7 +166,7 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 		{
 			QAngle ViewAngles;
 			g_EngineClient->GetViewAngles(&ViewAngles);
-			for (int i = 0; i <= 32; i++)
+			for (int i = 0; i <= g_EngineClient->GetMaxClients(); i++)
 			{
 				C_BasePlayer* pEntity = (C_BasePlayer*)g_EntityList->GetClientEntity(i);
 				if (pEntity && !pEntity->IsDormant() && pEntity->IsAlive() && pEntity->m_iTeamNum() != g_LocalPlayer->m_iTeamNum() && !pEntity->m_bGunGameImmunity())
@@ -241,14 +255,14 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 							if (g_Options.Aimbot_AutoScope && !g_LocalPlayer->m_bIsScoped() && g_LocalPlayer->m_hActiveWeapon()->IsSniper())
 								cmd->buttons |= IN_ATTACK2;
 
-							if (g_Options.Aimbot_AutoStop && g_LocalPlayer->m_iShotsFired() > 1 ) {
+							if (g_Options.Aimbot_AutoStop && cmd->buttons & IN_ATTACK ) {
 								cmd->forwardmove = 0;
 								cmd->sidemove = 0;
 								cmd->upmove = 0;
 								cmd->buttons = 0;
 							}
 
-							if (g_Options.Aimbot_AutoCrouch && g_LocalPlayer->m_iShotsFired() > 1)
+							if (g_Options.Aimbot_AutoCrouch && cmd->buttons & IN_ATTACK)
 								cmd->buttons |= IN_DUCK;
 							if (!g_Options.Aimbot_Silent) {
 								g_EngineClient->SetViewAngles(&EnemyAng);
@@ -263,7 +277,6 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 				}
 			}
 		}
-		g_Options.AimbotCanShootWhileAAON = true;
 	}
 }
 

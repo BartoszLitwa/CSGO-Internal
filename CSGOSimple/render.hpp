@@ -12,7 +12,7 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/impl/imgui_impl_dx9.h"
 #include "imgui/impl/imgui_impl_win32.h"
-#include "Beam.h"
+//#include "Beam.h"
 #include "valve_sdk/misc/Color.hpp"
 
 extern ImFont* g_pDefaultFont;
@@ -89,31 +89,35 @@ public:
 		RenderLine(x1 + w - 1, y1 + h - ih, x1 + w - 1, y1 + h, color, th);	// bottom right
 	}
 
-	//void DrawBeam(Vector src, Vector end, Color color, float life)
-	//{
-	//	 BeamInfo_t beamInfo;
-	//	 g_IViewRenderBeams RenderBeams;
-	//	 beamInfo.m_nType = 0;
-	//	 beamInfo.m_pszModelName = "sprites/physbeam.vmt";
-	//	 beamInfo.m_nModelIndex = -1; // will be set by CreateBeamPoints if its -1
-	//	 beamInfo.m_flHaloScale = 0.0f;
-	//	 beamInfo.m_flLife = 1.f;
-	//	 beamInfo.m_flWidth = 2.0f;
-	//	 beamInfo.m_flEndWidth = 2.0f;
-	//	 beamInfo.m_flFadeLength = 0.0f;
-	//	 beamInfo.m_flAmplitude = 2.0f;
-	//	 beamInfo.m_flBrightness = 255.f;
-	//	 beamInfo.m_flSpeed = 0.2f;
-	//	 beamInfo.m_nStartFrame = 0;
-	//	 beamInfo.m_flFrameRate = 0.f;
-	//	 beamInfo.m_flRed = 255.f;
-	//	 beamInfo.m_flGreen = 0.f;
-	//	 beamInfo.m_flBlue = 255.f;
-	//	 beamInfo.m_nSegments = 2;
-	//	 beamInfo.m_bRenderable = true;
-	//	 beamInfo.m_nFlags = 0;
-	//	 Beam_t* myBeam = RenderBeams.CreateBeamPoints(beamInfo); //->CreateBeamPoints(beamInfo);
-	//}
+	/*void DrawBeam(Vector src, Vector end, Color color, float life)
+	{
+		SDK::BeamInfo_t beamInfo;
+		beamInfo.m_nType = SDK::TE_BEAMPOINTS;
+		beamInfo.m_pszModelName = "sprites/physbeam.vmt";
+		beamInfo.m_nModelIndex = -1;
+		beamInfo.m_flHaloScale = 0.0f;
+		beamInfo.m_flLife = life;
+		beamInfo.m_flWidth = 1.4f;
+		beamInfo.m_flEndWidth = 1.4f;
+		beamInfo.m_flFadeLength = 0.0f;
+		beamInfo.m_flAmplitude = 2.0f;
+		beamInfo.m_flBrightness = (float)color.a;
+		beamInfo.m_flSpeed = 0.2f;
+		beamInfo.m_nStartFrame = 0.f;
+		beamInfo.m_flFrameRate = 0.f;
+		beamInfo.m_flRed = (float)color.r;
+		beamInfo.m_flGreen = (float)color.g;
+		beamInfo.m_flBlue = (float)color.b;
+		beamInfo.m_nSegments = 2;
+		beamInfo.m_bRenderable = true;
+		beamInfo.m_nFlags = SDK::FBEAM_ONLYNOISEONCE | SDK::FBEAM_NOTILE | SDK::FBEAM_HALOBEAM;
+		beamInfo.m_vecStart = src;
+		beamInfo.m_vecEnd = end;
+
+		SDK::Beam_t* myBeam = g_IViewRenderBeams->CreateBeamPoints(beamInfo);
+		if (!myBeam || myBeam == NULL) return;
+		g_IViewRenderBeams->DrawBeam(myBeam);
+	}*/
 
 	template <class T>
 	inline void RenderBox(T x1, T y1, T x2, T y2, Color color, float thickness = 1.f, float rounding = 0.f) {

@@ -28,7 +28,7 @@ static char* sidebar_tabs[] = {
     "SkinChanger"
 };
 
-constexpr static float get_sidebar_item_width() { return 150.0f; }
+constexpr static float get_sidebar_item_width() { return 125.0f; }
 constexpr static float get_sidebar_item_height() { return  50.0f; }
 
 namespace ImGuiEx
@@ -124,6 +124,7 @@ void RenderEspTab()
             ImGui::Checkbox("Enabled", &g_Options.esp_enabled);
             ImGui::Checkbox("Team check", &g_Options.esp_enemies_only);
             ImGui::Checkbox("Boxes", &g_Options.esp_player_boxes);
+			ImGui::Checkbox("Skeleton", &g_Options.esp_Skeleton);
             ImGui::Checkbox("Names", &g_Options.esp_player_names);
             ImGui::Checkbox("Health", &g_Options.esp_player_health);
             ImGui::Checkbox("Armour", &g_Options.esp_player_armour);
@@ -266,6 +267,7 @@ void RenderMiscTab()
 		if (g_Options.misc_BulletTracer) {
 			ImGui::SliderInt("Length", &g_Options.misc_BulletTracer_Value, 1, 10000);
 		}
+		ImGui::Checkbox("AirStuck", &g_Options.misc_AirStuck);
         //ImGui::PushItemWidth(-1.0f);
 		ImGui::NextColumn();
         ImGui::SliderInt("viewmodel_fov:", &g_Options.viewmodel_fov, 68, 120);

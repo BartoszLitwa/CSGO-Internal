@@ -28,6 +28,7 @@ IDirect3DDevice9*     g_D3DDevice9     = nullptr;
 CClientState*         g_ClientState    = nullptr;
 IPhysicsSurfaceProps* g_PhysSurface    = nullptr;
 IInputSystem*         g_InputSystem    = nullptr;
+//SDK::IViewRenderBeams* g_IViewRenderBeams = nullptr;
 C_LocalPlayer         g_LocalPlayer;
 
 namespace Interfaces
@@ -85,7 +86,7 @@ namespace Interfaces
         auto engine = GetModuleHandleW(L"engine.dll");
         auto dx9api = GetModuleHandleW(L"shaderapidx9.dll");
 
-		//g_IViewRenderBeams = **(IViewRenderBeams***)(Utils::PatternScan(client, "B9 ? ? ? ? ? ? ? ? A1 ? ? ? ? ? ? ? ? FF 10 A1 ? ? ? ? ? ? ? ? B9" + 1));
+		//g_IViewRenderBeams = *(SDK::IViewRenderBeams**)(Utils::PatternScan(client,"A1 ? ? ? ? 56 8B F1 B9 ? ? ? ? FF 50 08") + 0x1);
         g_GlobalVars      =  **(CGlobalVarsBase***)(Utils::PatternScan(client, "A1 ? ? ? ? 5E 8B 40 10") + 1);
         g_ClientMode      =        *(IClientMode**)(Utils::PatternScan(client, "A1 ? ? ? ? 8B 80 ? ? ? ? 5D") + 1);
         g_Input           =             *(CInput**)(Utils::PatternScan(client, "B9 ? ? ? ? 8B 40 38 FF D0 84 C0 0F 85") + 1);

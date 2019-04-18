@@ -111,6 +111,33 @@ bool Visuals::Player::Begin(C_BasePlayer* pl)
 void Visuals::Player::RenderBox() {
 	Render::Get().RenderBoxByType(ctx.bbox.left, ctx.bbox.top, ctx.bbox.right, ctx.bbox.bottom, ctx.clr, 1);
 }
+void Visuals::Player::RenderSkeleton()
+{
+	studiohdr_t* pstudioModel = g_MdlInfo->GetStudiomodel(ctx.pl->GetModel());
+	if (pstudioModel)
+	{
+		static matrix3x4_t pBoneToWorld[128];
+		if (ctx.pl->SetupBones(pBoneToWorld, 128, 256, g_GlobalVars->curtime))
+		{
+			for (int i = 0; i < pstudioModel->numbones; i++)
+			{
+				mstudiobone_t* pBone = pstudioModel->GetBone(i);
+				if (!pBone || !(pBone->flags & 256) || pBone->parent == -1)
+					continue;
+
+				Vector vBonePos1;
+				if (!Math::WorldToScreen(Vector(pBoneToWorld[i][0][3], pBoneToWorld[i][1][3], pBoneToWorld[i][2][3]), vBonePos1))
+					continue;
+
+				Vector vBonePos2;
+				if (!Math::WorldToScreen(Vector(pBoneToWorld[pBone->parent][0][3], pBoneToWorld[pBone->parent][1][3], pBoneToWorld[pBone->parent][2][3]), vBonePos2))
+					continue;
+
+				Render::Get().RenderLine((int)vBonePos1.x, (int)vBonePos1.y, (int)vBonePos2.x, (int)vBonePos2.y, g_Options.color_SkeletonESP);
+			}
+		}
+	}
+}
 //--------------------------------------------------------------------------------
 void Visuals::Player::RenderName()
 {
@@ -124,7 +151,7 @@ void Visuals::Player::RenderName()
 void Visuals::Player::RenderHealth()
 {
 	auto  hp = ctx.pl->m_iHealth();
-	float box_h = (float)fabs(ctx.bbox.bottom - ctx.bbox.top);
+	float box_h = (float)fabs(ctx.bbox.top - ctx.bbox.bottom);
 	//float off = (box_h / 6.f) + 5;
 	float off = 8;
 
@@ -201,7 +228,7 @@ void Visuals::Player::BulletTracer()
 	if (!Math::WorldToScreen(src3D, src) || !Math::WorldToScreen(trace.endpos, dst))
 		return;
 
-	Render::Get().RenderLine(src.x, src.y, dst.x, dst.y, g_Options.color_BulletTracer);
+	Render::Get().RenderLine(src.x, src.y, dst.x, dst.y, g_Options.color_BulletTracer, 1.8f);
 	//Render::Get().(dst.x - 3, dst.y - 3, 6, 6, color);
 }
 //--------------------------------------------------------------------------------
@@ -420,6 +447,7 @@ void Visuals::AddToDrawList() {
 			if (player.Begin((C_BasePlayer*)entity)) {
 				if (g_Options.esp_player_snaplines) player.RenderSnapline();
 				if (g_Options.esp_player_boxes)     player.RenderBox();
+				if (g_Options.esp_Skeleton)			player.RenderSkeleton();
 				if (g_Options.esp_player_weapons)   player.RenderWeaponName();
 				if (g_Options.esp_player_names)     player.RenderName();
 				if (g_Options.esp_player_health)    player.RenderHealth();

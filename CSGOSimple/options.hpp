@@ -12,6 +12,7 @@ public:
     // ESP
     // 
     OPTION(bool, esp_enabled, true);
+	OPTION(bool, esp_Skeleton, true);
     OPTION(bool, esp_enemies_only, true);
     OPTION(bool, esp_player_boxes, true);
     OPTION(bool, esp_player_names, true);
@@ -67,6 +68,7 @@ public:
 	OPTION(bool, misc_showranks, true);
 	OPTION(bool, misc_watermark, true);
 	OPTION(bool, misc_BulletTracer, true);
+	OPTION(bool, misc_AirStuck, false);
 	OPTION(int, misc_BulletTracer_Value, 1000);
 	OPTION(float, misc_thirdperson_dist, 150.f);
 	OPTION(int, viewmodel_fov, 68);
@@ -146,7 +148,8 @@ public:
     OPTION(Color, color_chams_arms_visible, Color(0, 128, 255));
     OPTION(Color, color_chams_arms_occluded, Color(0, 128, 255)); 
 	OPTION(Color, color_watermark, Color(0, 128, 255)); // no menu config cuz its useless
-	OPTION(Color, color_BulletTracer, Color(0, 255, 0));
+	OPTION(Color, color_BulletTracer, Color(0, 255, 0)); 
+	OPTION(Color, color_SkeletonESP, Color(0, 0, 0));
 };
 
 extern Config g_Options;

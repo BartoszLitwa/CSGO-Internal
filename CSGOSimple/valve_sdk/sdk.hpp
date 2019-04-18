@@ -81,7 +81,7 @@ extern IDirect3DDevice9*     g_D3DDevice9;
 extern CClientState*         g_ClientState;
 extern IPhysicsSurfaceProps* g_PhysSurface;
 extern IInputSystem*         g_InputSystem;
-;//extern IViewRenderBeams*     g_IViewRenderBeams;
+//extern SDK::IViewRenderBeams*     g_IViewRenderBeams;
 
 
 template<typename... Args>

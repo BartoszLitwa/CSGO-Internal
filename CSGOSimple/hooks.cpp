@@ -168,6 +168,12 @@ namespace Hooks
 		if (g_Options.misc_bhop)
 			BunnyHop::OnCreateMove(cmd);
 
+		if (g_Options.misc_AutoStrafe)
+			BunnyHop::AutoStrafe(cmd);
+
+		if (g_Options.misc_AirStuck)
+			BunnyHop::AirStuck(cmd);
+
 		if (g_Options.misc_UnlimitedDuck)
 			BunnyHop::UnlimitedDuck(cmd);
 

@@ -30,6 +30,9 @@
     <Filter Include="Header Files\fonts">
       <UniqueIdentifier>{69d9715e-6194-4271-9c84-4b80235b0dba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\JSON">
+      <UniqueIdentifier>{8be6cff7-b498-4025-8276-2420ce0ae053}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Helpers\math.cpp">
@@ -444,6 +447,12 @@
     </ClInclude>
     <ClInclude Include="valve_sdk\interfaces\IViewRenderBeams.h">
       <Filter>Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON\json.hpp">
+      <Filter>Header Files\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="IteamDefinitions.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
