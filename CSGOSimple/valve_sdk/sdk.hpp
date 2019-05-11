@@ -43,7 +43,7 @@
 #include "Misc/CUserCmd.hpp"
 #include "Misc/glow_outline_effect.hpp"
 #include "Misc/datamap.hpp"
-
+#include "../JSON/Configuration.h"
 #include "netvars.hpp"
 
 struct IDirect3DDevice9;

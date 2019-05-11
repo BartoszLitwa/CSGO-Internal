@@ -13,7 +13,8 @@ float m_oldsidemove;
 
 void AntiAim::StartAA(CUserCmd * cmd, bool & bSendPacket) //Przyklady AA https://github.com/A5-/Gamerfood_CSGO/blob/a7456f5e5d163b8fe7d51b8eb80a95a013feb138/csgo_internal/csgo_internal/AntiAim.cpp
 {
-	if (g_LocalPlayer->m_nMoveType() != MOVETYPE_LADDER && g_LocalPlayer->m_nMoveType() != MOVETYPE_NOCLIP && !(cmd->buttons & IN_ATTACK) )
+	
+	if (g_LocalPlayer->m_nMoveType() != MOVETYPE_LADDER && g_LocalPlayer->m_nMoveType() != MOVETYPE_NOCLIP && !(cmd->buttons & IN_ATTACK) )  //Movetype zwraca zawsze 0
 	{
 		fixMoveStart(cmd);
 

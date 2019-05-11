@@ -22,11 +22,11 @@ C_BasePlayer * Aimbot::GetClosestEnemy()
 			if (g_Options.Aimbot_VisibilityCheck)
 			{
 				if (!g_LocalPlayer->CanSeePlayer(pEntity, g_Options.Aimbot_Bone))
-					break;
+					continue;
 			}
 
 			QAngle EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetHitboxPos(g_Options.Aimbot_Bone));
-			float delta = Math::GetFOV(ViewAngles - g_LocalPlayer->m_aimPunchAngle() * 2, EnemyAng);    //(EnemyAng - (g_LocalPlayer->m_aimPunchAngle() * 2) - ViewAngles).Clamped().Length();
+			float delta = Math::GetFOV(ViewAngles, EnemyAng);    //(EnemyAng - (g_LocalPlayer->m_aimPunchAngle() * 2) - ViewAngles).Clamped().Length();
 			if (delta < bestDelta && delta <= g_Options.Aimbot_AimbotFov)
 			{
 				bestDelta = delta;
@@ -120,17 +120,6 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 					break;
 				}
 
-				/*if (g_Options.AntiAim_AntiAim) {
-					if (g_Options.AntiAim_AntiAimType == 1) {
-						float server_time = g_LocalPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
-						cmd->viewangles.yaw = (float)(fmod(server_time / 1.5f * 360.0f / g_Options.AntiAim_SpinBotSpeed, 360.0f));
-					}
-					if (g_Options.AntiAim_AntiAimType == 2) {
-						cmd->viewangles.yaw -= g_Options.AntiAim_AntiAimyaw;
-						cmd->viewangles.pitch -= g_Options.AntiAim_AntiAimpitch;
-					}
-				}*/
-
 				if (g_Options.Aimbot_RecoilPrediction)
 					EnemyAng -= g_LocalPlayer->m_aimPunchAngle() * 2;
 
@@ -145,7 +134,6 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 					cmd->forwardmove = 0;
 					cmd->sidemove = 0;
 					cmd->upmove = 0;
-					cmd->buttons = 0;
 				}
 
 				if (g_Options.Aimbot_AutoCrouch && cmd->buttons & IN_ATTACK)
@@ -157,7 +145,7 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 				}
 				else {
 					cmd->viewangles = EnemyAng;
-					cmd->buttons != IN_ATTACK;
+					cmd->buttons |= IN_ATTACK;
 				}
 			}
 		}
@@ -232,21 +220,15 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 					}
 					if (canshoot)
 					{
-						
-						/*if (!g_Options.Aimbot_AimAtBackTrack)
-							EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetBonePos(g_Options.Aimbot_Bone));
-						else
-							EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetBonePos(8));*/
-						/*if (g_Options.AntiAim_AntiAim) {
-							if (g_Options.AntiAim_AntiAimType == 1) {
-								float server_time = g_LocalPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
-								cmd->viewangles.yaw = (float)(fmod(server_time / 1.5f * 360.0f / g_Options.AntiAim_SpinBotSpeed, 360.0f));
-							}
-							if (g_Options.AntiAim_AntiAimType == 2) {
-								cmd->viewangles.yaw -= g_Options.AntiAim_AntiAimyaw;
-								cmd->viewangles.pitch -= g_Options.AntiAim_AntiAimpitch;
-							}
-						}*/
+						BackTracking BackTr;
+						if (g_Options.Aimbot_AimAtBackTrack && g_Options.Aimbot_AimAtBackTrack) {
+							EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), BackTr.tick[i].at(g_Options.Aimbot_BackTrackTicks - 1).Head);
+							BackTr.BackTrackingCalc(cmd);
+						}
+						else {
+							EnemyAng = Math::CalcAngle(g_LocalPlayer->GetEyePos(), pEntity->GetBonePos(8));
+							BackTr.BackTrackingCalc(cmd);
+						}
 
 						EnemyAng -= g_LocalPlayer->m_aimPunchAngle() * 2;
 						EnemyAng.Clamp();
@@ -259,7 +241,6 @@ void Aimbot::Aim(CUserCmd* cmd, bool& bSendPacket)
 								cmd->forwardmove = 0;
 								cmd->sidemove = 0;
 								cmd->upmove = 0;
-								cmd->buttons = 0;
 							}
 
 							if (g_Options.Aimbot_AutoCrouch && cmd->buttons & IN_ATTACK)

@@ -156,6 +156,61 @@ public:
 	{
 		return CallVFunction<void(__thiscall*)(C_BaseEntity*, int)>(this, 75)(this, index);
 	}
+
+	inline int* GetItemDefinitionIndex() {
+		// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_iItemDefinitionIndex
+		return (int*)((DWORD)this + 0x2D70 + 0x40 + 0x1D8);
+	}
+
+	inline int* GetItemIDHigh() {
+		// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_iItemIDHigh
+		return (int*)((DWORD)this + 0x2D70 + 0x40 + 0x1F0);
+	}
+
+	inline int* GetAccountID() {
+		// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_iAccountID
+		return (int*)((DWORD)this + 0x2D70 + 0x40 + 0x1F8);
+	}
+
+	inline int* GetEntityQuality() {
+		// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_iEntityQuality
+		return (int*)((DWORD)this + 0x2D70 + 0x40 + 0x1DC);
+	}
+
+	inline char* GetCustomName() {
+		// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_szCustomName
+		return (char*)((DWORD)this + 0x2D70 + 0x40 + 0x26C);
+	}
+
+	inline int* GetOriginalOwnerXuidLow() {
+		// DT_BaseAttributableItem -> m_OriginalOwnerXuidLow
+		return (int*)((DWORD)this + 0x3168);
+	}
+
+	inline int* GetOriginalOwnerXuidHigh() {
+		// DT_BaseAttributableItem -> m_OriginalOwnerXuidHigh
+		return (int*)((DWORD)this + 0x316C);
+	}
+
+	inline int* GetFallbackPaintKit() {
+		// DT_BaseAttributableItem -> m_nFallbackPaintKit
+		return (int*)((DWORD)this + 0x3170);
+	}
+
+	inline int* GetFallbackSeed() {
+		// DT_BaseAttributableItem -> m_nFallbackSeed
+		return (int*)((DWORD)this + 0x3174);
+	}
+
+	inline float* GetFallbackWear() {
+		// DT_BaseAttributableItem -> m_flFallbackWear
+		return (float*)((DWORD)this + 0x3178);
+	}
+
+	inline int* GetFallbackStatTrak() {
+		// DT_BaseAttributableItem -> m_nFallbackStatTrak
+		return (int*)((DWORD)this + 0x317C);
+	}
 };
 
 class C_BaseWeaponWorldModel : public C_BaseEntity
@@ -227,7 +282,7 @@ public:
 	NETVAR(Vector, m_vecViewOffset, "DT_BasePlayer", "m_vecViewOffset[0]");
 	NETVAR(QAngle, m_viewPunchAngle, "DT_BasePlayer", "m_viewPunchAngle");
 	NETVAR(QAngle, m_aimPunchAngle, "DT_BasePlayer", "m_aimPunchAngle");
-	NETVAR(CHandle<C_BaseViewModel>, m_hViewModel, "DT_BasePlayer", "m_hViewModel[0]");
+	NETVAR(CHandle<C_BaseViewModel>, m_hViewModel, "DT_BasePlayer", "m_hViewModel"); //m_hViewModel[0]
 	NETVAR(Vector, m_vecVelocity, "DT_BasePlayer", "m_vecVelocity[0]");
 	NETVAR(float, m_flMaxspeed, "DT_BasePlayer", "m_flMaxspeed");
 	NETVAR(CHandle<C_BasePlayer>, m_hObserverTarget, "DT_BasePlayer", "m_hObserverTarget");
@@ -255,8 +310,13 @@ public:
 	}
 
 
-	PNETVAR(CHandle<C_BaseCombatWeapon>, m_hMyWeapons, "DT_BaseCombatCharacter", "m_hMyWeapons");
+	PNETVAR(CHandle<C_BaseCombatWeapon>, m_hMyWeapons, "DT_BasePlayer ", "m_hMyWeapons"); //DT_BaseCombatCharacters
 	PNETVAR(CHandle<C_BaseAttributableItem>, m_hMyWearables, "DT_BaseCombatCharacter", "m_hMyWearables");
+
+	inline UINT* GetWeapons() {
+		// DT_BasePlayer -> m_hMyWeapons
+		return (UINT*)((DWORD)this + 0x2DE8);
+	}
 
 	CUserCmd*& m_pCurrentCommand();
 

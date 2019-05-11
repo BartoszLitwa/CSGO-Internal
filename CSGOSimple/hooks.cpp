@@ -278,7 +278,9 @@ namespace Hooks
 	{
 		static auto ofunc = hlclient_hook.get_original<FrameStageNotify>(index::FrameStageNotify);
 		// may be u will use it lol
-		//Skins::OnFrameStageNotify(stage);
+		if (g_Options.SkinChanger_SkinChanger)
+			Skins::OnFrameStageNotify(stage);
+
 		if (g_Input->m_fCameraInThirdPerson) { //To see AntiAim in ThirdPerson
 			*(QAngle*)g_LocalPlayer->GetVAngles() = qLastTickAngles;
 		}

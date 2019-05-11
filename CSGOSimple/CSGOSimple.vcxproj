@@ -148,7 +148,6 @@
     <ClInclude Include="imgui\impl\imgui_impl_dx9.h" />
     <ClInclude Include="imgui\impl\imgui_impl_win32.h" />
     <ClInclude Include="IteamDefinitions.hpp" />
-    <ClInclude Include="JSON\json.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SkinChanger.h" />
     <ClInclude Include="Skins.h" />

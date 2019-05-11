@@ -17,13 +17,14 @@ public:
 		int tick = -1;
 		Vector Head;
 	};
+	std::vector<Tick> tick[64];
 
 	void BackTrackStart(CUserCmd* cmd);
 
 	void BackTrackingCalc(CUserCmd * cmd);
 
 private:
-	std::vector<Tick> tick[64];
+	
 
 
 };

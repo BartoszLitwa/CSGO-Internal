@@ -448,9 +448,6 @@
     <ClInclude Include="valve_sdk\interfaces\IViewRenderBeams.h">
       <Filter>Header Files\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="JSON\json.hpp">
-      <Filter>Header Files\JSON</Filter>
-    </ClInclude>
     <ClInclude Include="IteamDefinitions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
